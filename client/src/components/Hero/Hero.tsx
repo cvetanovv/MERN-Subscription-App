@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { Container } from "react-bootstrap";
+import { Container, ModalProps } from "react-bootstrap";
+import ModalComponent from "../Modal/Modal";
 
 const HeroComponent = styled.header`
     padding: 5rem 0;
@@ -23,7 +24,7 @@ const SubHeading = styled.h3`
     font-weight: 400;
 `;
 
-const Hero = () => {
+const Hero = ({}: ModalProps) => {
     return (
         <HeroComponent>
             <Container>
@@ -33,6 +34,8 @@ const Hero = () => {
                         Grow, learn and become more successful by reading some
                         of the top articles
                     </SubHeading>
+                    <ModalComponent text="Signup" variant="danger"/>
+                    <ModalComponent text="Login" variant="primary"/>
                 </HeaderContainer>
             </Container>
         </HeroComponent>
