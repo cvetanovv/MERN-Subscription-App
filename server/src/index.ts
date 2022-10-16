@@ -1,11 +1,10 @@
 import express from "express";
-import authRoutes from "./routes/auth"
+import authRoutes from "./routes/auth";
 
 const app = express();
 
-app.get("./", (req, res) => {
-    res.send("Hello");
-});
+app.use(express.json());
+app.use("/auth", authRoutes);
 
 app.listen(8080, () => {
     console.log("Listening on port 8080...");
