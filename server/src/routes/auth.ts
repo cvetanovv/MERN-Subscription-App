@@ -1,5 +1,6 @@
 import express from "express";
 import { body, validationResult } from "express-validator";
+import User from "../models/user";
 
 const router = express.Router();
 
@@ -20,10 +21,10 @@ router.post(
         }
 
         const { email, password } = req.body;
-        res.json({
-            email,
-            password,
-        });
+
+        const user = await User.findOne({email})
+
+        res.json({user});
     }
 );
 
