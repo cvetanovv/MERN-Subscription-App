@@ -34,8 +34,8 @@ const Hero = ({}: ModalProps) => {
                         Grow, learn and become more successful by reading some
                         of the top articles
                     </SubHeading>
-                    <ModalComponent text="Signup" variant="danger"/>
-                    <ModalComponent text="Login" variant="primary"/>
+                    <ModalComponent text="Signup" variant="danger" isSignupFlow={true}/>
+                    <ModalComponent text="Login" variant="primary" isSignupFlow={false}/>
                 </HeaderContainer>
             </Container>
         </HeroComponent>
