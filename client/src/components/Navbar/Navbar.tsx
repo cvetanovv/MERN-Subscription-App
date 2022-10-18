@@ -1,5 +1,6 @@
 import Nav from "react-bootstrap/Nav";
-
+import {Link} from "react-router-dom"
+ 
 const Navbar = () => {
     return (
         <Nav
@@ -7,7 +8,7 @@ const Navbar = () => {
             onSelect={(selectedKey) => alert(`selected ${selectedKey}`)}
         >
             <Nav.Item>
-                <Nav.Link href="#">Home</Nav.Link>
+                <Link to="/" className="nav-link">Home</Link>
             </Nav.Item>
         </Nav>
     );

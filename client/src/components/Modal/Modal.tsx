@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Modal, Button, InputGroup, FormControl } from "react-bootstrap";
 import styled from "styled-components";
@@ -26,6 +27,8 @@ const ModalComponent = ({ text, variant, isSignupFlow }: ModalProps) => {
         setShow(false);
     };
 
+    const navigate = useNavigate();
+
     const handleClick = async () => {
         let data;
         if (isSignupFlow) {
@@ -49,8 +52,11 @@ const ModalComponent = ({ text, variant, isSignupFlow }: ModalProps) => {
         }
 
         if (data.errors.length) {
-            setErrorMsg(data.errors[0].msg);
+            return setErrorMsg(data.errors[0].msg);
         }
+
+        localStorage.setItem("token", data.data.token);
+        navigate("/articles");
     };
 
     return (
