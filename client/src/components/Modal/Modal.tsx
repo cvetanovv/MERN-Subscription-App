@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Modal, Button, InputGroup, FormControl } from "react-bootstrap";
+import styled from "styled-components";
 
 interface ModalProps {
     text: string;
@@ -8,10 +9,15 @@ interface ModalProps {
     isSignupFlow: boolean;
 }
 
+const ErrorMessage = styled.p`
+    color: red;
+`;
+
 const ModalComponent = ({ text, variant, isSignupFlow }: ModalProps) => {
     const [show, setShow] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
 
     const handleShow = () => {
         setShow(true);
@@ -23,16 +29,27 @@ const ModalComponent = ({ text, variant, isSignupFlow }: ModalProps) => {
     const handleClick = async () => {
         let data;
         if (isSignupFlow) {
-            const response = await axios.post("http://localhost:8080/auth/signup", {
-                email,
-                password,
-            });
-            console.log(response)
+            const { data: signUpData } = await axios.post(
+                "http://localhost:8080/auth/signup",
+                {
+                    email,
+                    password,
+                }
+            );
+            data = signUpData;
         } else {
-            const response = await axios.post("http://localhost:8080/auth/login", {
-                email,
-                password,
-            });
+            const { data: loginData } = await axios.post(
+                "http://localhost:8080/auth/login",
+                {
+                    email,
+                    password,
+                }
+            );
+            data = loginData;
+        }
+
+        if (data.errors.length) {
+            setErrorMsg(data.errors[0].msg);
         }
     };
 
@@ -68,6 +85,7 @@ const ModalComponent = ({ text, variant, isSignupFlow }: ModalProps) => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </InputGroup>
+                    {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
