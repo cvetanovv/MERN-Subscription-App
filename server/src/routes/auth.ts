@@ -3,6 +3,7 @@ import { body, validationResult } from "express-validator";
 import User from "../models/user";
 import bcrypt from "bcryptjs";
 import JWT from "jsonwebtoken";
+import { checkAuth } from "../middleware/checkAuth";
 
 const router = express.Router();
 
@@ -99,9 +100,7 @@ router.post("/login", async (req, res) => {
     }
 
     const token = await JWT.sign(
-        {
-            email: user.email,
-        },
+        { email: user.email },
         process.env.JWT_SECRET as string,
         {
             expiresIn: 360000,
@@ -114,6 +113,31 @@ router.post("/login", async (req, res) => {
             token,
             user: {
                 id: user.id,
+                email: user.email,
+            },
+        },
+    });
+});
+
+router.get("/me", checkAuth, async (req, res) => {
+    const user = await User.findOne({ email: req.user });
+
+    if (!user) {
+        return res.json({
+            errors: [
+                {
+                    msg: "Invalids credential",
+                },
+            ],
+            data: null,
+        });
+    }
+
+    return res.json({
+        errors: [],
+        data: {
+            user: {
+                id: user._id,
                 email: user.email,
             },
         },
